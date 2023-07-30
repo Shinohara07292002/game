@@ -208,6 +208,17 @@ def collisionChecker(rect, ball):
         return True
     return False
 
+def gameOver():
+    gameOver = True
+    while gameOver:
+        # Event handling
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    return True
+
 def main():
     running = True
     striker = Striker(0, HEIGHT-50, 100, 20, 10, WHITE)
