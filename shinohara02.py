@@ -252,7 +252,8 @@ def main():
             running = gameOver()
             while listOfBlocks:
                 listOfBlocks.pop(0)
-                lives = 3
+                lives = 3 
+                score = 0
                 listOfBlocks = populateBlocks(blockWidth, blockHeight, horizontalGap, verticalGap)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -277,6 +278,13 @@ def main():
                 block.hit()
                 
                 if block.getHealth() <= 0:
+                    
+                    if block.color == GREEN:
+                        score += 5 
+                    elif block.color == WHITE:
+                        score += 10
+                    elif block.color == RED:
+                        score += 15    
                     listOfBlocks.pop(listOfBlocks.index(block))
             
         # Update
