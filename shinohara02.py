@@ -1,6 +1,7 @@
 import pygame
 import random
 import itertools
+import sys
 
 
 pygame.init()
@@ -22,6 +23,8 @@ pygame.display.set_caption("ブロック崩し")
 # to control the frame rate
 clock = pygame.time.Clock()
 FPS = 30
+
+
 
 # Ball Class
 class Ball:
@@ -227,10 +230,30 @@ def main():
     blockWidth, blockHeight = 40, 15
     horizontalGap, verticalGap = 20, 20
     listOfBlocks = populateBlocks(blockWidth, blockHeight, horizontalGap, verticalGap)
+    lives = 3
+    score = 0
+    livesText = font.render("Lives", True, WHITE)
+    livesTextRect = livesText.get_rect()
+    livesTextRect.center = (120, HEIGHT-10)
+    
+    scoreText = font.render("score", True, WHITE)
+    scoreTextRect = scoreText.get_rect()
+    scoreTextRect.center = (20, HEIGHT-10)
 
     while running:
-        obj = screen.fill(BLACK)
-        pygame.display.update(obj)
+        screen.fill(BLACK)
+        screen.blit(livesText, livesTextRect)
+        screen.blit(scoreText, scoreTextRect)
+        livesText = font.render("Lives : " + str(lives), True, WHITE)
+        scoreText = font.render("Score : " + str(score), True, WHITE)
+        if not listOfBlocks:
+            listOfBlocks = populateBlocks(blockWidth, blockHeight, horizontalGap, verticalGap)
+        if lives <= 0:
+            running = gameOver()
+            while listOfBlocks:
+                listOfBlocks.pop(0)
+                lives = 3
+                listOfBlocks = populateBlocks(blockWidth, blockHeight, horizontalGap, verticalGap)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -260,6 +283,7 @@ def main():
         striker.update(strikerXFac)
         lifeLost = ball.update()
         if lifeLost:
+            lives -= 1
             ball.reset()
         # Display
         striker.display()
